@@ -1,0 +1,32 @@
+2024-07-18 16:37:16,509 - test_place_order_data_set_2 - INFO - Starting test: test_place_order
+2024-07-18 16:37:16,510 - test_place_order_data_set_2 - INFO - Using credentials: {'username': 'standard_user', 'password': 'secret_sauce'}
+2024-07-18 16:37:16,510 - test_place_order_data_set_2 - INFO - Product name: Sauce Labs Fleece Jacket
+2024-07-18 16:37:16,511 - test_place_order_data_set_2 - INFO - Entering username
+2024-07-18 16:37:16,511 - test_place_order_data_set_2 - INFO - Entering username: standard_user
+2024-07-18 16:37:16,697 - test_place_order_data_set_2 - INFO - Entering password
+2024-07-18 16:37:16,698 - test_place_order_data_set_2 - INFO - Entering password: secret_sauce
+2024-07-18 16:37:16,858 - test_place_order_data_set_2 - INFO - Clicking login
+2024-07-18 16:37:16,957 - test_place_order_data_set_2 - INFO - Performing login
+2024-07-18 16:37:16,957 - test_place_order_data_set_2 - INFO - Entering username: standard_user
+2024-07-18 16:37:17,007 - test_place_order_data_set_2 - INFO - Entering password: secret_sauce
+2024-07-18 16:37:17,055 - test_place_order_data_set_2 - INFO - Clicking login button
+2024-07-18 16:37:17,145 - test_place_order_data_set_2 - INFO - Adding product to cart
+2024-07-18 16:37:17,259 - test_place_order_data_set_2 - INFO - Getting add/remove cart locator for product: Sauce Labs Fleece Jacket
+2024-07-18 16:37:17,259 - test_place_order_data_set_2 - INFO - Clicking add to cart or remove button
+2024-07-18 16:37:17,439 - test_place_order_data_set_2 - INFO - Navigating to cart
+2024-07-18 16:37:17,439 - test_place_order_data_set_2 - INFO - Clicking cart icon
+2024-07-18 16:37:17,580 - test_place_order_data_set_2 - INFO - Proceeding to checkout
+2024-07-18 16:37:17,580 - test_place_order_data_set_2 - INFO - Clicking checkout button
+2024-07-18 16:37:17,746 - test_place_order_data_set_2 - INFO - Entering checkout details
+2024-07-18 16:37:17,746 - test_place_order_data_set_2 - INFO - Entering checkout details
+2024-07-18 16:37:17,746 - test_place_order_data_set_2 - INFO - Entering first name: Fn513
+2024-07-18 16:37:17,775 - test_place_order_data_set_2 - INFO - Entering last name: Ln513
+2024-07-18 16:37:17,803 - test_place_order_data_set_2 - INFO - Entering zipcode: 513
+2024-07-18 16:37:17,942 - test_place_order_data_set_2 - INFO - Clicking continue
+2024-07-18 16:37:17,942 - test_place_order_data_set_2 - INFO - Clicking continue
+2024-07-18 16:37:18,081 - test_place_order_data_set_2 - INFO - Clicking finish
+2024-07-18 16:37:18,082 - test_place_order_data_set_2 - INFO - Clicking finish button
+2024-07-18 16:37:18,215 - test_place_order_data_set_2 - INFO - Verifying order confirmation
+2024-07-18 16:37:18,295 - test_place_order_data_set_2 - INFO - Getting confirmation message
+2024-07-18 16:37:18,297 - test_place_order_data_set_2 - INFO - Test completed successfully
+2024-07-18 16:37:18,297 - test_place_order_data_set_2 - INFO - Test finished: test_place_order

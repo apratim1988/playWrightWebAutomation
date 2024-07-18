@@ -1,0 +1,32 @@
+2024-07-18 16:37:13,568 - test_place_order1_data_set_1 - INFO - Starting test: test_place_order1
+2024-07-18 16:37:13,569 - test_place_order1_data_set_1 - INFO - Using credentials: {'username': 'standard_user', 'password': 'secret_sauce'}
+2024-07-18 16:37:13,569 - test_place_order1_data_set_1 - INFO - Product name: Test.allTheThings() T-Shirt (Red)
+2024-07-18 16:37:13,570 - test_place_order1_data_set_1 - INFO - Entering username
+2024-07-18 16:37:13,570 - test_place_order1_data_set_1 - INFO - Entering username: standard_user
+2024-07-18 16:37:13,744 - test_place_order1_data_set_1 - INFO - Entering password
+2024-07-18 16:37:13,744 - test_place_order1_data_set_1 - INFO - Entering password: secret_sauce
+2024-07-18 16:37:13,902 - test_place_order1_data_set_1 - INFO - Clicking login
+2024-07-18 16:37:14,011 - test_place_order1_data_set_1 - INFO - Performing login
+2024-07-18 16:37:14,011 - test_place_order1_data_set_1 - INFO - Entering username: standard_user
+2024-07-18 16:37:14,062 - test_place_order1_data_set_1 - INFO - Entering password: secret_sauce
+2024-07-18 16:37:14,109 - test_place_order1_data_set_1 - INFO - Clicking login button
+2024-07-18 16:37:14,201 - test_place_order1_data_set_1 - INFO - Adding product to cart
+2024-07-18 16:37:14,361 - test_place_order1_data_set_1 - INFO - Getting add/remove cart locator for product: Test.allTheThings() T-Shirt (Red)
+2024-07-18 16:37:14,362 - test_place_order1_data_set_1 - INFO - Clicking add to cart or remove button
+2024-07-18 16:37:14,531 - test_place_order1_data_set_1 - INFO - Navigating to cart
+2024-07-18 16:37:14,531 - test_place_order1_data_set_1 - INFO - Clicking cart icon
+2024-07-18 16:37:14,665 - test_place_order1_data_set_1 - INFO - Proceeding to checkout
+2024-07-18 16:37:14,665 - test_place_order1_data_set_1 - INFO - Clicking checkout button
+2024-07-18 16:37:14,800 - test_place_order1_data_set_1 - INFO - Entering checkout details
+2024-07-18 16:37:14,801 - test_place_order1_data_set_1 - INFO - Entering checkout details
+2024-07-18 16:37:14,801 - test_place_order1_data_set_1 - INFO - Entering first name: Fn3650
+2024-07-18 16:37:14,823 - test_place_order1_data_set_1 - INFO - Entering last name: Ln3650
+2024-07-18 16:37:14,847 - test_place_order1_data_set_1 - INFO - Entering zipcode: 3650
+2024-07-18 16:37:14,974 - test_place_order1_data_set_1 - INFO - Clicking continue
+2024-07-18 16:37:14,975 - test_place_order1_data_set_1 - INFO - Clicking continue
+2024-07-18 16:37:15,107 - test_place_order1_data_set_1 - INFO - Clicking finish
+2024-07-18 16:37:15,107 - test_place_order1_data_set_1 - INFO - Clicking finish button
+2024-07-18 16:37:15,249 - test_place_order1_data_set_1 - INFO - Verifying order confirmation
+2024-07-18 16:37:15,343 - test_place_order1_data_set_1 - INFO - Getting confirmation message
+2024-07-18 16:37:15,362 - test_place_order1_data_set_1 - INFO - Test completed successfully
+2024-07-18 16:37:15,362 - test_place_order1_data_set_1 - INFO - Test finished: test_place_order1

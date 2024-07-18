@@ -1,0 +1,32 @@
+2024-07-18 16:37:16,298 - test_place_order1_data_set_2 - INFO - Starting test: test_place_order1
+2024-07-18 16:37:16,299 - test_place_order1_data_set_2 - INFO - Using credentials: {'username': 'standard_user', 'password': 'secret_sauce'}
+2024-07-18 16:37:16,299 - test_place_order1_data_set_2 - INFO - Product name: Sauce Labs Backpack
+2024-07-18 16:37:16,299 - test_place_order1_data_set_2 - INFO - Entering username
+2024-07-18 16:37:16,300 - test_place_order1_data_set_2 - INFO - Entering username: standard_user
+2024-07-18 16:37:16,475 - test_place_order1_data_set_2 - INFO - Entering password
+2024-07-18 16:37:16,476 - test_place_order1_data_set_2 - INFO - Entering password: secret_sauce
+2024-07-18 16:37:16,616 - test_place_order1_data_set_2 - INFO - Clicking login
+2024-07-18 16:37:16,717 - test_place_order1_data_set_2 - INFO - Performing login
+2024-07-18 16:37:16,718 - test_place_order1_data_set_2 - INFO - Entering username: standard_user
+2024-07-18 16:37:16,768 - test_place_order1_data_set_2 - INFO - Entering password: secret_sauce
+2024-07-18 16:37:16,814 - test_place_order1_data_set_2 - INFO - Clicking login button
+2024-07-18 16:37:16,908 - test_place_order1_data_set_2 - INFO - Adding product to cart
+2024-07-18 16:37:17,053 - test_place_order1_data_set_2 - INFO - Getting add/remove cart locator for product: Sauce Labs Backpack
+2024-07-18 16:37:17,053 - test_place_order1_data_set_2 - INFO - Clicking add to cart or remove button
+2024-07-18 16:37:17,211 - test_place_order1_data_set_2 - INFO - Navigating to cart
+2024-07-18 16:37:17,212 - test_place_order1_data_set_2 - INFO - Clicking cart icon
+2024-07-18 16:37:17,360 - test_place_order1_data_set_2 - INFO - Proceeding to checkout
+2024-07-18 16:37:17,360 - test_place_order1_data_set_2 - INFO - Clicking checkout button
+2024-07-18 16:37:17,509 - test_place_order1_data_set_2 - INFO - Entering checkout details
+2024-07-18 16:37:17,509 - test_place_order1_data_set_2 - INFO - Entering checkout details
+2024-07-18 16:37:17,509 - test_place_order1_data_set_2 - INFO - Entering first name: Fn5130
+2024-07-18 16:37:17,537 - test_place_order1_data_set_2 - INFO - Entering last name: Ln5130
+2024-07-18 16:37:17,560 - test_place_order1_data_set_2 - INFO - Entering zipcode: 5130
+2024-07-18 16:37:17,693 - test_place_order1_data_set_2 - INFO - Clicking continue
+2024-07-18 16:37:17,693 - test_place_order1_data_set_2 - INFO - Clicking continue
+2024-07-18 16:37:17,824 - test_place_order1_data_set_2 - INFO - Clicking finish
+2024-07-18 16:37:17,825 - test_place_order1_data_set_2 - INFO - Clicking finish button
+2024-07-18 16:37:17,965 - test_place_order1_data_set_2 - INFO - Verifying order confirmation
+2024-07-18 16:37:18,048 - test_place_order1_data_set_2 - INFO - Getting confirmation message
+2024-07-18 16:37:18,065 - test_place_order1_data_set_2 - INFO - Test completed successfully
+2024-07-18 16:37:18,066 - test_place_order1_data_set_2 - INFO - Test finished: test_place_order1
