@@ -28,13 +28,6 @@ def set_up_tear_down(browser_context):
     yield page
     page.close()
 
-
-import pytest
-from py.xml import html
-
-import pytest
-from py.xml import html
-
 @pytest.hookimpl(tryfirst=True)
 def pytest_exception_interact(node, call, report):
     if report.failed:
@@ -58,4 +51,3 @@ def pytest_exception_interact(node, call, report):
                 print("Debug: Screenshot path not returned or invalid")  # Debug print
         else:
             print("Debug: Page or data_set_id not available")  # Debug print
-
