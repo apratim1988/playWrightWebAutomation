@@ -3,22 +3,45 @@ from playwright.sync_api import sync_playwright
 from utils.config import Config
 from py.xml import html
 
+
+def pytest_addoption(parser):
+    parser.addoption(
+        "--playwright-browser", action="store", default="chromium",
+        help="Browser to run tests with: chromium, firefox, or webkit"
+    )
+
+
+@pytest.fixture(scope="session")
+def browser_name(pytestconfig):
+    return pytestconfig.getoption("playwright-browser")
+
+
 @pytest.fixture(scope="session")
 def playwright():
     with sync_playwright() as playwright_instance:
         yield playwright_instance
 
+
 @pytest.fixture(scope="session")
-def browser(playwright):
-    browser = playwright.chromium.launch(headless=True)  # Set headless=True for headless mode
+def browser(playwright, browser_name):
+    if browser_name == "chromium":
+        browser = playwright.chromium.launch(headless=False)
+    elif browser_name == "firefox":
+        browser = playwright.firefox.launch(headless=False)
+    elif browser_name == "webkit":
+        browser = playwright.webkit.launch(headless=False)
+    else:
+        raise ValueError(f"Unsupported browser: {browser_name}")
     yield browser
     browser.close()
+
 
 @pytest.fixture(scope="function")
 def browser_context(browser):
     context = browser.new_context()
     yield context
     context.close()
+
 
 @pytest.fixture(scope="function")
 def set_up_tear_down(browser_context):
@@ -27,6 +50,7 @@ def set_up_tear_down(browser_context):
     page.goto("https://www.saucedemo.com/")
     yield page
     page.close()
+
 
 @pytest.hookimpl(tryfirst=True)
 def pytest_exception_interact(node, call, report):
