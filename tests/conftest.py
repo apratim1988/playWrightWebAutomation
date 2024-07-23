@@ -2,39 +2,47 @@ import pytest
 from playwright.sync_api import sync_playwright
 from utils.config import Config
 from py.xml import html
-
+from utils.environment_urls import ENVIRONMENT_URLS
 
 def pytest_addoption(parser):
     parser.addoption(
         "--playwright-browser", action="store", default="chromium",
         help="Browser to run tests with: chromium, firefox, or webkit"
     )
-
+    parser.addoption(
+        "--environment", action="store", default="production",
+        help="Environment to run tests in: production, beta, dev, qa"
+    )
 
 @pytest.fixture(scope="session")
 def browser_name(pytestconfig):
     return pytestconfig.getoption("playwright-browser")
 
+@pytest.fixture(scope="session")
+def environment(pytestconfig):
+    env = pytestconfig.getoption("environment").lower()
+    if env in ENVIRONMENT_URLS:
+        return ENVIRONMENT_URLS[env]
+    else:
+        raise ValueError(f"Unsupported environment: {env}")
 
 @pytest.fixture(scope="session")
 def playwright():
     with sync_playwright() as playwright_instance:
         yield playwright_instance
 
-
 @pytest.fixture(scope="session")
 def browser(playwright, browser_name):
     if browser_name == "chromium":
-        browser = playwright.chromium.launch(headless=False)
+        browser = playwright.chromium.launch(headless=True)
     elif browser_name == "firefox":
-        browser = playwright.firefox.launch(headless=False)
+        browser = playwright.firefox.launch(headless=True)
     elif browser_name == "webkit":
-        browser = playwright.webkit.launch(headless=False)
+        browser = playwright.webkit.launch(headless=True)
     else:
         raise ValueError(f"Unsupported browser: {browser_name}")
     yield browser
     browser.close()
-
 
 @pytest.fixture(scope="function")
 def browser_context(browser):
@@ -42,15 +50,13 @@ def browser_context(browser):
     yield context
     context.close()
 
-
 @pytest.fixture(scope="function")
-def set_up_tear_down(browser_context):
+def set_up_tear_down(browser_context, environment):
     page = browser_context.new_page()
     page.set_viewport_size({"width": 1536, "height": 800})
-    page.goto("https://www.saucedemo.com/")
+    page.goto(environment)
     yield page
     page.close()
-
 
 @pytest.hookimpl(tryfirst=True)
 def pytest_exception_interact(node, call, report):

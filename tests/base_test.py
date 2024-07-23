@@ -2,9 +2,12 @@ import pytest
 import os
 import json
 import shutil
+import time
+from playwright.sync_api import Page, Locator, Frame
 from utils.config import Config
 from utils.logger_utils import setup_logger
 from utils.screenshot_utils import capture_screenshot
+
 
 @pytest.mark.usefixtures("set_up_tear_down")
 class BaseTest:
@@ -45,3 +48,55 @@ class BaseTest:
         with open(Config.CREDENTIALS_FILE_PATH, 'r') as file:
             credentials = json.load(file)
         return credentials
+
+    def get_frame_locator(self, page: Page, frame_selector: str):
+        """Returns a FrameLocator for the specified iframe selector."""
+        return page.frame_locator(frame_selector)
+
+    def select_dropdown_option(self, locator: Locator, option: str):
+        """Selects an option from a dropdown."""
+        locator.select_option(value=option)
+
+    def check_checkbox(self, locator: Locator, should_check: bool):
+        """Checks or unchecks a checkbox based on should_check flag."""
+        if should_check != locator.is_checked():
+            locator.check() if should_check else locator.uncheck()
+
+    def select_radio_button(self, locator: Locator):
+        """Selects a radio button."""
+        locator.check()
+
+    def upload_file(self, locator: Locator, file_path: str):
+        """Uploads a file using the file input element."""
+        locator.set_input_files(file_path)
+
+    def download_file(self, page: Page, download_url: str, download_path: str):
+        """Downloads a file from a given URL."""
+        page.goto(download_url)
+        page.click('a[download]')  # Adjust selector based on the download link
+        time.sleep(5)  # Wait for download to complete
+        shutil.move(download_url, download_path)  # Move file to desired location
+
+    def intercept_request(self, context, url: str):
+        """Intercepts network requests to the specified URL."""
+
+        def handle_route(route):
+            request = route.request
+            if url in request.url:
+                route.continue_()
+            else:
+                route.abort()
+
+        context.route(url, handle_route)
+
+    def explicit_wait(self, page: Page, locator: Locator, timeout: int):
+        """Waits explicitly for a specific element to be visible with a customizable timeout."""
+        locator.wait_for(state='visible', timeout=timeout)
+
+    def scroll_down(page: Page, distance: int = 1000):
+        """Scrolls down by the specified distance."""
+        page.evaluate(f'window.scrollBy(0, {distance});')
+
+    def scroll_up(page: Page, distance: int = 1000):
+        """Scrolls up by the specified distance."""
+        page.evaluate(f'window.scrollBy(0, -{distance});')
