@@ -1,10 +1,12 @@
+# Conftest (Under tests package under the root project directory)
+
+import os
 import pytest
 from playwright.sync_api import sync_playwright
 from utils.config import Config
 from py.xml import html
 from utils.environment_urls import ENVIRONMENT_URLS
 from utils.excel_utils import read_test_data
-
 
 def pytest_addoption(parser):
     parser.addoption(
@@ -24,6 +26,7 @@ def browser_name(pytestconfig):
 def environment(pytestconfig):
     env = pytestconfig.getoption("environment").lower()
     if env in ENVIRONMENT_URLS:
+        os.environ['ENVIRONMENT'] = env  # Set the environment variable here
         return ENVIRONMENT_URLS[env]
     else:
         raise ValueError(f"Unsupported environment: {env}")

@@ -17,7 +17,8 @@ class BaseTest:
 
     @classmethod
     def clear_screenshot_for_method(cls, method_name):
-        screenshot_dir = os.path.join(Config.SCREENSHOT_DIR, method_name)
+        environment = os.getenv('ENVIRONMENT')
+        screenshot_dir = os.path.join(Config.SCREENSHOT_DIR, environment, method_name)
         if os.path.exists(screenshot_dir):
             shutil.rmtree(screenshot_dir)
 
@@ -29,6 +30,7 @@ class BaseTest:
         if not hasattr(self, 'method_setup_done'):
             self.clear_screenshot_for_method(self.method_name)
             self.__class__.method_setup_done = True
+
 
     def initialize_logger(self, data_set_id):
         self.data_set_id = data_set_id
