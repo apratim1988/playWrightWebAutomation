@@ -2,13 +2,12 @@ import pytest
 from playwright.sync_api import Page, expect
 from pages.LoginPage import LoginPage
 from tests.base_test import BaseTest
-from utils.excel_utils import read_test_data
-from utils.config import Config
+
 
 class TestPlaceOrder(BaseTest):
-    #@pytest.mark.flaky(reruns=2, reruns_delay=1)
-    @pytest.mark.parametrize("data", read_test_data(Config.EXCEL_FILE_PATH, Config.get_sheet_name('place_order')))
-    def test_place_order(self, set_up_tear_down, data, request):
+
+    # @pytest.mark.flaky(reruns=2, reruns_delay=1)
+    def test_place_order(self, set_up_tear_down, data):
         data_set_id = data['id']  # Use the id from the test data
         self.initialize_logger(data_set_id)  # Initialize logger with data_set_id
 
@@ -32,7 +31,7 @@ class TestPlaceOrder(BaseTest):
 
             self.logger.info('Clicking login')
             self.take_screenshot(page, 'before_click_login', data_set_id)
-            products_p = login_p.do_login(credentials,product_name)
+            products_p = login_p.do_login(credentials, product_name)
 
             self.logger.info('Adding product to cart')
             self.take_screenshot(page, 'product_list_page', data_set_id)

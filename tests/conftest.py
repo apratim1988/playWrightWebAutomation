@@ -3,6 +3,8 @@ from playwright.sync_api import sync_playwright
 from utils.config import Config
 from py.xml import html
 from utils.environment_urls import ENVIRONMENT_URLS
+from utils.excel_utils import read_test_data
+
 
 def pytest_addoption(parser):
     parser.addoption(
@@ -81,3 +83,18 @@ def pytest_exception_interact(node, call, report):
                 print("Debug: Screenshot path not returned or invalid")  # Debug print
         else:
             print("Debug: Page or data_set_id not available")  # Debug print
+
+@pytest.fixture(scope="session")
+def test_data_file(environment):
+    env_name = [key for key, value in ENVIRONMENT_URLS.items() if value == environment][0]
+    return Config.get_excel_file_path(env_name)
+
+def pytest_generate_tests(metafunc):
+    if "data" in metafunc.fixturenames:
+        env = metafunc.config.getoption("environment")
+        file_path = Config.get_excel_file_path(env)
+        # Determine sheet name dynamically based on the test case function name
+        test_case_name = metafunc.function.__name__
+        sheet_name = Config.get_sheet_name(test_case_name)
+        test_data = read_test_data(file_path, sheet_name)
+        metafunc.parametrize("data", test_data)

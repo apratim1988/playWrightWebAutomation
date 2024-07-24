@@ -4,10 +4,10 @@ from pages.LoginPage import LoginPage
 from tests.base_test import BaseTest
 
 
-class TestPlaceOrder1(BaseTest):
+class TestPlaceOrder2(BaseTest):
 
     # @pytest.mark.flaky(reruns=2, reruns_delay=1)
-    def test_place_order1(self, set_up_tear_down, data):
+    def test_place_order2(self, set_up_tear_down, data):
         data_set_id = data['id']  # Use the id from the test data
         self.initialize_logger(data_set_id)  # Initialize logger with data_set_id
 
@@ -69,4 +69,4 @@ class TestPlaceOrder1(BaseTest):
         except Exception as e:
             self.fail_test(page, f"Test failed due to an exception: {str(e)}", data_set_id)
         finally:
-            self.logger.info('Test finished: test_place_order1')
+            self.logger.info('Test finished: test_place_order2')
