@@ -1,6 +1,7 @@
 import logging
 from pages.ProductListPage import ProductListPage
 
+
 class LoginPage:
 
     def __init__(self, page, logger):
@@ -31,3 +32,7 @@ class LoginPage:
         self.enter_password(credentials['password'])
         self.click_login()
         return ProductListPage(self.page, product, self.logger)
+
+    @property
+    def login_button_locator(self):
+        return self._login_btn
