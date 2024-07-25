@@ -1,4 +1,3 @@
-# Conftest (Under tests package under the root project directory)
 
 import os
 import pytest
@@ -26,7 +25,7 @@ def browser_name(pytestconfig):
 def environment(pytestconfig):
     env = pytestconfig.getoption("environment").lower()
     if env in ENVIRONMENT_URLS:
-        os.environ['ENVIRONMENT'] = env  # Set the environment variable here
+        os.environ['ENVIRONMENT'] = env
         return ENVIRONMENT_URLS[env]
     else:
         raise ValueError(f"Unsupported environment: {env}")
@@ -70,22 +69,22 @@ def pytest_exception_interact(node, call, report):
         page = getattr(base_test_instance, 'page', None)
         data_set_id = getattr(base_test_instance, 'data_set_id', None)
 
-        print("Debug: Test failed, trying to capture screenshot...")  # Debug print
+        print("Debug: Test failed, trying to capture screenshot...")
 
         if page and data_set_id:
             step_name = 'failure'
             screenshot_path = base_test_instance.take_screenshot(page, step_name, data_set_id)
 
-            print(f"Debug: Screenshot path - {screenshot_path}")  # Debug print
+            print(f"Debug: Screenshot path - {screenshot_path}")
 
             if screenshot_path:
                 extra = getattr(report, 'extra', [])
                 extra.append(html.div(html.a(html.img(src=screenshot_path, width='800px'), href=screenshot_path)))
                 report.extra = extra
             else:
-                print("Debug: Screenshot path not returned or invalid")  # Debug print
+                print("Debug: Screenshot path not returned or invalid")
         else:
-            print("Debug: Page or data_set_id not available")  # Debug print
+            print("Debug: Page or data_set_id not available")
 
 @pytest.fixture(scope="session")
 def test_data_file(environment):
@@ -96,7 +95,6 @@ def pytest_generate_tests(metafunc):
     if "data" in metafunc.fixturenames:
         env = metafunc.config.getoption("environment")
         file_path = Config.get_excel_file_path(env)
-        # Determine sheet name dynamically based on the test case function name
         test_case_name = metafunc.function.__name__
         sheet_name = Config.get_sheet_name(test_case_name)
         test_data = read_test_data(file_path, sheet_name)

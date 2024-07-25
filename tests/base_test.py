@@ -16,28 +16,36 @@ class BaseTest:
         Config.ensure_directories()
 
     @classmethod
-    def clear_screenshot_for_method(cls, method_name):
+    def clear_screenshot_for_method(cls, method_name, environment):
         environment = os.getenv('ENVIRONMENT')
         screenshot_dir = os.path.join(Config.SCREENSHOT_DIR, environment, method_name)
         if os.path.exists(screenshot_dir):
             shutil.rmtree(screenshot_dir)
 
+    @classmethod
+    def clear_logs_for_method(cls, method_name, environment):
+        environment = os.getenv('ENVIRONMENT')
+        log_dir = os.path.join(Config.LOG_DIR, environment, method_name)
+        if os.path.exists(log_dir):
+            shutil.rmtree(log_dir)
+
     def setup_method(self, method):
         Config.ensure_directories()
         self.method_name = method.__name__
 
-        # Only clear the screenshots directory once per method
         if not hasattr(self, 'method_setup_done'):
-            self.clear_screenshot_for_method(self.method_name)
+            environment = os.getenv('ENVIRONMENT', 'default')
+            if environment == 'default':
+                print("Debug: Environment variable not set, using default")  # Debug print
+            self.clear_screenshot_for_method(self.method_name, environment)
+            self.clear_logs_for_method(self.method_name, environment)
             self.__class__.method_setup_done = True
-
 
     def initialize_logger(self, data_set_id):
         self.data_set_id = data_set_id
         self.logger = setup_logger(self.method_name, self.data_set_id)
 
     def take_screenshot(self, page, step_name, data_set_id):
-        # Delegate to the util function, using method info
         capture_screenshot(page, self.method_name, step_name, data_set_id)
 
     def fail_test(self, page, error_message, data_set_id):

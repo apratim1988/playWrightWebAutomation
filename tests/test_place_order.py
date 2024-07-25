@@ -6,7 +6,6 @@ from tests.base_test import BaseTest
 
 class TestPlaceOrder(BaseTest):
 
-    # @pytest.mark.flaky(reruns=2, reruns_delay=1)
     def test_place_order(self, set_up_tear_down, data):
         data_set_id = data['id']  # Use the id from the test data
         self.initialize_logger(data_set_id)  # Initialize logger with data_set_id
