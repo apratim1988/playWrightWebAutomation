@@ -55,8 +55,20 @@ class BaseTest:
 
     @staticmethod
     def read_credentials():
+        environment = os.getenv('ENVIRONMENT')
+        if not environment:
+            raise EnvironmentError("ENVIRONMENT variable is not set.")
+
         with open(Config.CREDENTIALS_FILE_PATH, 'r') as file:
-            credentials = json.load(file)
+            all_credentials = json.load(file)
+
+        credentials = all_credentials.get(environment)
+        if not credentials:
+            raise KeyError(f"No credentials found for environment: {environment}")
+
+        if not isinstance(credentials, dict) or 'username' not in credentials or 'password' not in credentials:
+            raise ValueError(f"Invalid credentials format for environment: {environment}")
+
         return credentials
 
     def get_frame_locator(self, page: Page, frame_selector: str):

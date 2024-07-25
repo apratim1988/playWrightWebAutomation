@@ -14,8 +14,18 @@ job('RunTestsForAllEnvironments') {
         def browsers = ['chromium', 'firefox', 'webkit']
 
         environments.each { env ->
+            def usernameCredentialId = "${env}-username"
+            def passwordCredentialId = "${env}-password"
+
             browsers.each { browser ->
-                shell("cd tests && py -m pytest -v -s --playwright-browser=${browser} --environment=${env} --html=report/report.html")
+                withCredentials([usernamePassword(credentialsId: usernameCredentialId, usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                    shell("""
+                        export ENVIRONMENT=${env}
+                        export USERNAME=$USERNAME
+                        export PASSWORD=$PASSWORD
+                        cd tests && py -m pytest -v -s --playwright-browser=${browser} --environment=${env} --html=report/report.html
+                    """)
+                }
             }
         }
     }
