@@ -7,8 +7,8 @@ from tests.base_test import BaseTest
 class TestPlaceOrder1(BaseTest):
 
     def test_place_order1(self, set_up_tear_down, data):
-        data_set_id = data['id']  # Use the id from the test data
-        self.initialize_logger(data_set_id)  # Initialize logger with data_set_id
+        data_set_id = data['id']
+        self.initialize_logger(data_set_id)
 
         page = set_up_tear_down
         credentials = self.read_credentials()

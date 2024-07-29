@@ -12,7 +12,7 @@ class Config:
 
     @staticmethod
     def ensure_directories():
-        # Ensure that necessary directories exist
+
         dirs = [Config.LOG_DIR, Config.SCREENSHOT_DIR]
         for directory in dirs:
             if not os.path.exists(directory):

@@ -3,7 +3,7 @@ import os
 import json
 import shutil
 import time
-from playwright.sync_api import Page, Locator, Frame
+from playwright.sync_api import Page, Locator, Frame, Route, Request
 from utils.config import Config
 from utils.logger_utils import setup_logger
 from utils.screenshot_utils import capture_screenshot
@@ -36,7 +36,7 @@ class BaseTest:
         if not hasattr(self, 'method_setup_done'):
             environment = os.getenv('ENVIRONMENT', 'default')
             if environment == 'default':
-                print("Debug: Environment variable not set, using default")  # Debug print
+                print("Debug: Environment variable not set, using default")
             self.clear_screenshot_for_method(self.method_name, environment)
             self.clear_logs_for_method(self.method_name, environment)
             self.__class__.method_setup_done = True
@@ -95,19 +95,24 @@ class BaseTest:
     def download_file(self, page: Page, download_url: str, download_path: str):
         """Downloads a file from a given URL."""
         page.goto(download_url)
-        page.click('a[download]')  # Adjust selector based on the download link
-        time.sleep(5)  # Wait for download to complete
-        shutil.move(download_url, download_path)  # Move file to desired location
+        page.click('a[download]')
+        time.sleep(5)
+        shutil.move(download_url, download_path)
 
     def intercept_request(self, context, url: str):
-        """Intercepts network requests to the specified URL."""
-
-        def handle_route(route):
-            request = route.request
+        """Intercepts network requests to the specified URL and allows for modification in the test method."""
+        def handle_route(route: Route, request: Request):
             if url in request.url:
-                route.continue_()
+                response = route.fetch()
+                original_data = response.json()
+
+                route.fulfill(
+                    status=200,
+                    content_type="application/json",
+                    body=json.dumps(original_data)
+                )
             else:
-                route.abort()
+                route.continue_()
 
         context.route(url, handle_route)
 

@@ -6,7 +6,7 @@ job('RunTestsForAllEnvironments') {
     }
 
     triggers {
-        scm('H/5 * * * *')
+        scm('H 1 * * *')
     }
 
     steps {

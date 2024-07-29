@@ -32,8 +32,8 @@ class TestLoginVisual(BaseTest):
 
             self.logger.info('Clicking login')
             self.take_screenshot(page, 'before_click_login', data_set_id)
-            #assert_snapshot(page.screenshot(mask=[login_p.login_button_locator]))
-            assert_snapshot(page.screenshot(full_page=True))
+            assert_snapshot(page.screenshot(mask=[login_p.login_button_locator]))
+            #assert_snapshot(page.screenshot(full_page=True))
 
         except AssertionError as ae:
             self.fail_test(page, f"Assertion error occurred: {str(ae)}", data_set_id)
