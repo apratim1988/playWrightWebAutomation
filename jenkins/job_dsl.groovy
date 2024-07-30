@@ -1,23 +1,24 @@
-job('RunTestsForAllEnvironments') {
-    description('Runs Playwright tests for all environments')
 
-    scm {
-        git('https://your-repository-url.git', 'main')
-    }
+def environments = ['production', 'beta', 'dev', 'qa']
+def browsers = ['chromium', 'firefox', 'webkit']
 
-    triggers {
-        scm('H 1 * * *')
-    }
+environments.each { env ->
+    job("RunTestsFor${env.capitalize()}") {
+        description("Runs Playwright tests for the ${env} environment")
 
-    steps {
-        def environments = ['production', 'beta', 'dev', 'qa']
-        def browsers = ['chromium', 'firefox', 'webkit']
+        scm {
+            git('https://your-repository-url.git', 'main')
+        }
 
-        environments.each { env ->
-            def usernameCredentialId = "${env}-username"
-            def passwordCredentialId = "${env}-password"
+        triggers {
+            scm('H 1 * * *')
+        }
 
+        steps {
             browsers.each { browser ->
+                def usernameCredentialId = "${env}-username"
+                def passwordCredentialId = "${env}-password"
+
                 withCredentials([usernamePassword(credentialsId: usernameCredentialId, usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                     shell("""
                         export ENVIRONMENT=${env}
@@ -28,16 +29,16 @@ job('RunTestsForAllEnvironments') {
                 }
             }
         }
-    }
 
-    publishers {
-        publishHtml {
-            report('tests/report') {
-                reportFiles('report.html')
-                reportName('Playwright Test Report')
-                keepAll()
-                allowMissing(false)
-                alwaysLinkToLastBuild(true)
+        publishers {
+            publishHtml {
+                report('tests/report') {
+                    reportFiles('report.html')
+                    reportName('Playwright Test Report')
+                    keepAll()
+                    allowMissing(false)
+                    alwaysLinkToLastBuild(true)
+                }
             }
         }
     }
