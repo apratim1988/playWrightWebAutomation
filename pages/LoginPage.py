@@ -1,4 +1,5 @@
 import logging
+from utils.element_utils import find_element_with_fallback
 from pages.ProductListPage import ProductListPage
 
 
@@ -7,24 +8,39 @@ class LoginPage:
     def __init__(self, page, logger):
         self.page = page
         self.logger = logger
-        self._username = page.get_by_placeholder("Username")
-        self._password = page.get_by_placeholder("Password")
-        self._login_btn = page.get_by_text("Login")
-        self._error_message = page.locator("//h3[contains(text(), 'Epic sadface')]")
+        self._username_locators = [
+            ("placeholder", "test"),
+            ("id", "user-name")
+        ]
+        self._password_locators = [
+            ("placeholder", "Password"),
+            ("id", "password")
+        ]
+        self._login_btn_locators = [
+            ("text", "Login"),
+            ("xpath", "//button[contains(text(), 'Login')]")
+        ]
+        self._error_message_locators = [
+            ("data-test", "error"),
+            ("xpath", "//div[contains(@class, 'error') and contains(text(), 'sadface')]")
+        ]
 
     def enter_username(self, u_name):
         self.logger.info(f'Entering username: {u_name}')
-        self._username.clear()
-        self._username.fill(u_name)
+        username_field = find_element_with_fallback(self.page, self._username_locators, self.logger)
+        username_field.clear()
+        username_field.fill(u_name)
 
     def enter_password(self, p_word):
         self.logger.info(f'Entering password: {p_word}')
-        self._password.clear()
-        self._password.fill(p_word)
+        password_field = find_element_with_fallback(self.page, self._password_locators, self.logger)
+        password_field.clear()
+        password_field.fill(p_word)
 
     def click_login(self):
         self.logger.info('Clicking login button')
-        self._login_btn.click()
+        login_button = find_element_with_fallback(self.page, self._login_btn_locators, self.logger)
+        login_button.click()
 
     def do_login(self, credentials, product):
         self.logger.info('Performing login')
@@ -35,4 +51,4 @@ class LoginPage:
 
     @property
     def login_button_locator(self):
-        return self._login_btn
+        return find_element_with_fallback(self.page, self._login_btn_locators, self.logger)
