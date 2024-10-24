@@ -19,7 +19,7 @@ def find_element_with_fallback(page, strategies, logger):
                 continue
 
             if element.is_visible():
-                if i > 0:  # Log only if we are not using the first locator
+                if i > 0:
                     logger.warning(f"Primary locator failed. Using alternate locator: {strategy}='{value}'")
                 return element
         except Exception as e:
