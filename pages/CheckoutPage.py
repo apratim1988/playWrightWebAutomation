@@ -9,6 +9,20 @@ class CheckoutPage:
         self._continue = page.locator("//input[@id='continue']")
         self._finish_button = page.locator("#finish")
         self._confirm_message = page.locator("h2.complete-header")
+        self._item_names = page.locator('[data-test="inventory-item-name"]')
+        self._item_total = page.locator('[data-test="subtotal-label"]')
+
+    @property
+    def item_names(self):
+        """Product names listed on the checkout overview (step two)."""
+        self.logger.info('Getting overview item names')
+        return self._item_names
+
+    @property
+    def item_total(self):
+        """'Item total: $X' label on the checkout overview (step two)."""
+        self.logger.info('Getting item total')
+        return self._item_total
 
     def enter_first_name(self, f_name):
         self.logger.info(f'Entering first name: {f_name}')

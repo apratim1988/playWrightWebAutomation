@@ -1,9 +1,9 @@
 
+import base64
 import os
 import pytest
 from playwright.sync_api import sync_playwright
 from utils.config import Config
-from py.xml import html
 from utils.environment_urls import ENVIRONMENT_URLS
 from utils.excel_utils import read_test_data
 
@@ -19,7 +19,7 @@ def pytest_addoption(parser):
 
 @pytest.fixture(scope="session")
 def browser_name(pytestconfig):
-    return pytestconfig.getoption("playwright-browser")
+    return pytestconfig.getoption("playwright_browser")
 
 @pytest.fixture(scope="session")
 def environment(pytestconfig):
@@ -55,36 +55,45 @@ def browser_context(browser):
     context.close()
 
 @pytest.fixture(scope="function")
-def set_up_tear_down(browser_context, environment):
+def set_up_tear_down(request, browser_context, environment):
     page = browser_context.new_page()
     page.set_viewport_size({"width": 1536, "height": 800})
     page.goto(environment)
+    # Expose the page to the test instance so the failure hook can screenshot it.
+    if request.instance is not None:
+        request.instance.page = page
     yield page
     page.close()
 
-@pytest.hookimpl(tryfirst=True)
-def pytest_exception_interact(node, call, report):
-    if report.failed:
-        base_test_instance = node.instance
-        page = getattr(base_test_instance, 'page', None)
-        data_set_id = getattr(base_test_instance, 'data_set_id', None)
+@pytest.hookimpl(hookwrapper=True)
+def pytest_runtest_makereport(item, call):
+    """Attach a failure screenshot to the pytest-html report.
 
-        print("Debug: Test failed, trying to capture screenshot...")
+    Runs while the report is being built (before pytest-html renders it) and while
+    the page is still open, which pytest_exception_interact does not guarantee.
+    """
+    outcome = yield
+    report = outcome.get_result()
+    if report.when != "call" or not report.failed:
+        return
 
-        if page and data_set_id:
-            step_name = 'failure'
-            screenshot_path = base_test_instance.take_screenshot(page, step_name, data_set_id)
+    instance = item.instance
+    page = getattr(instance, 'page', None)
+    data_set_id = getattr(instance, 'data_set_id', None)
+    if page is None or data_set_id is None or page.is_closed():
+        return
 
-            print(f"Debug: Screenshot path - {screenshot_path}")
+    # Reuse the screenshot fail_test already took; otherwise take one now.
+    screenshot_path = getattr(instance, 'failure_screenshot', None) or \
+        instance.take_screenshot(page, 'failure', data_set_id)
 
-            if screenshot_path:
-                extra = getattr(report, 'extra', [])
-                extra.append(html.div(html.a(html.img(src=screenshot_path, width='800px'), href=screenshot_path)))
-                report.extra = extra
-            else:
-                print("Debug: Screenshot path not returned or invalid")
-        else:
-            print("Debug: Page or data_set_id not available")
+    pytest_html = item.config.pluginmanager.getplugin("html")
+    if pytest_html and screenshot_path and os.path.exists(screenshot_path):
+        with open(screenshot_path, "rb") as image:
+            encoded = base64.b64encode(image.read()).decode()
+        extras = getattr(report, 'extras', [])
+        extras.append(pytest_html.extras.image(encoded, mime_type="image/png", extension="png"))
+        report.extras = extras
 
 @pytest.fixture(scope="session")
 def test_data_file(environment):
@@ -93,8 +102,10 @@ def test_data_file(environment):
 
 def pytest_generate_tests(metafunc):
     if "data" in metafunc.fixturenames:
-        env = metafunc.config.getoption("environment")
+        env = metafunc.config.getoption("environment").lower()
         file_path = Config.get_excel_file_path(env)
+        if not os.path.exists(file_path):
+            pytest.exit(f"Test data workbook not found for environment '{env}': {file_path}", returncode=4)
         test_case_name = metafunc.function.__name__
         sheet_name = Config.get_sheet_name(test_case_name)
         test_data = read_test_data(file_path, sheet_name)

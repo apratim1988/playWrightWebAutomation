@@ -20,3 +20,4 @@ def capture_screenshot(page, test_case_name, step_name, data_set_id):
     screenshot_path = os.path.join(data_set_dir, f"{step_name}_{timestamp}.png")
 
     page.screenshot(path=screenshot_path)
+    return screenshot_path

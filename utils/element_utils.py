@@ -14,7 +14,7 @@ def find_element_with_fallback(page, strategies, logger):
             elif strategy == "xpath":
                 element = page.locator(value)
             elif strategy == "data-test":
-                element = page.locator(value)
+                element = page.locator(f'[data-test="{value}"]')
             else:
                 continue
 

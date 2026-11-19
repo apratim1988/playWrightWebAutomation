@@ -9,13 +9,19 @@ class ProductListPage:
         self._products_header = page.locator("span.title")
         self._burger_menu = page.locator("//button[@id='react-burger-menu-btn']")
         self._logout_btn = page.locator("//a[@data-test='logout-sidebar-link']")
-        self._add_to_cart = page.locator(f"//div[text()='{product}']/ancestor::div[@class='inventory_item_label']/following-sibling::div/button")
+        self._add_to_cart = self.get_add_remove_cart_locator(product) if product else None
         self._cart_icon = page.locator("//a[@class='shopping_cart_link']")
+        self._cart_badge = page.locator('[data-test="shopping-cart-badge"]')
 
     @property
     def product_header(self):
         self.logger.info('Getting product header')
         return self._products_header
+
+    @property
+    def cart_badge(self):
+        self.logger.info('Getting cart badge')
+        return self._cart_badge
 
     def click_burger_menu_btn(self):
         self.logger.info('Clicking burger menu button')
@@ -34,7 +40,22 @@ class ProductListPage:
         self.logger.info(f'Getting add/remove cart locator for product: {product}')
         return self.page.locator(f"//div[text()='{product}']/ancestor::div[@class='inventory_item_label']/following-sibling::div/button")
 
+    def add_product_to_cart(self, product):
+        self.logger.info(f'Adding product to cart: {product}')
+        self.get_add_remove_cart_locator(product).click()
+        return self
+
+    def get_product_price(self, product):
+        """Returns the listed price of a product as a float, e.g. 29.99 for '$29.99'."""
+        price_text = self.page.locator('[data-test="inventory-item"]') \
+            .filter(has=self.page.get_by_text(product, exact=True)) \
+            .locator('[data-test="inventory-item-price"]').inner_text()
+        self.logger.info(f'Price of {product}: {price_text}')
+        return float(price_text.replace('$', ''))
+
     def click_add_to_cart_or_remove(self):
+        if self._add_to_cart is None:
+            raise ValueError("ProductListPage was created without a product name")
         self.logger.info('Clicking add to cart or remove button')
         self._add_to_cart.click()
         return self
