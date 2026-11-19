@@ -18,7 +18,7 @@ class TestLoginVisual(BaseTest):
 
         try:
             self.logger.info('Starting test: test_login_visual')
-            self.logger.info(f'Using credentials: {credentials}')
+            self.logger.info(f"Using user: {credentials['username']}")
             self.logger.info(f'Product name: {product_name}')
 
             login_p = LoginPage(page, self.logger)

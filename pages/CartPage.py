@@ -6,6 +6,12 @@ class CartPage:
         self.page = page
         self.logger = logger
         self.checkout_button = page.locator("//button[@id='checkout']")
+        self._item_names = page.locator('[data-test="inventory-item-name"]')
+
+    @property
+    def item_names(self):
+        self.logger.info('Getting cart item names')
+        return self._item_names
 
     def click_checkout_button(self):
         self.logger.info('Clicking checkout button')

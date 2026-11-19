@@ -16,7 +16,7 @@ class TestPlaceOrder(BaseTest):
 
         try:
             self.logger.info('Starting test: test_place_order')
-            self.logger.info(f'Using credentials: {credentials}')
+            self.logger.info(f"Using user: {credentials['username']}")
             self.logger.info(f'Product name: {product_name}')
 
             login_p = LoginPage(page, self.logger)
@@ -34,16 +34,17 @@ class TestPlaceOrder(BaseTest):
 
             self.logger.info('Adding product to cart')
             self.take_screenshot(page, 'product_list_page', data_set_id)
-            products_p.get_add_remove_cart_locator(product_name)
             products_p.click_add_to_cart_or_remove()
             self.take_screenshot(page, 'added_product_to_cart', data_set_id)
 
             self.logger.info('Navigating to cart')
-            checkout_p = products_p.click_cart_icon()
+            cart_p = products_p.click_cart_icon()
             self.take_screenshot(page, 'cart_page', data_set_id)
+            expect(products_p.cart_badge).to_have_text("1")
+            expect(cart_p.item_names).to_have_text([product_name])
 
             self.logger.info('Proceeding to checkout')
-            checkout_p = checkout_p.click_checkout_button()
+            checkout_p = cart_p.click_checkout_button()
             self.take_screenshot(page, 'checkout_page', data_set_id)
 
             self.logger.info('Entering checkout details')

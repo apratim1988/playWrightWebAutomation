@@ -1,0 +1,12 @@
+# Secrets: local credentials only; CI uses TEST_USERNAME / TEST_PASSWORD
+utils/credentials.json
+
+# Test run artifacts
+logs/
+screenshot/
+report/
+
+# Python / local environment
+venv/
+__pycache__/
+*.pyc
